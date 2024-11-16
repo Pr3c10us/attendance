@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { address as ContractAddress } from "../../../utils/abis/attendance.json";
 import toast from "react-hot-toast";
-import { erc20Abi } from "viem";
 
 const AddStudent = (props: {
   setAddForm: React.Dispatch<React.SetStateAction<boolean>>;

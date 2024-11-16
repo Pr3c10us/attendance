@@ -45,8 +45,6 @@ const Default = () => {
   const {
     writeContract,
     data: hash,
-    isError: writeError,
-    error,
     isPending,
   } = useWriteContract();
   const {

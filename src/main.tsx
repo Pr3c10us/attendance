@@ -15,7 +15,7 @@ globalThis.Buffer = Buffer;
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <React.StrictMode>
+  <React.StrictMode>
   <WagmiProvider config={config}>
     <QueryClientProvider client={queryClient}>
       <Toaster
@@ -33,5 +33,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <App />
     </QueryClientProvider>
   </WagmiProvider>,
-  // </React.StrictMode>
+  </React.StrictMode>
 );
