@@ -11,13 +11,7 @@ const AddStudent = (props: {
   const [address, setAddress] = useState("");
   const [toastID, setToastID] = useState<string>();
 
-  const {
-    writeContract,
-    data: hash,
-    isError: writeError,
-    error,
-    isPending,
-  } = useWriteContract();
+  const { writeContract, data: hash, error, isPending } = useWriteContract();
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
