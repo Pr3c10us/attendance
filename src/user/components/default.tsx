@@ -42,11 +42,7 @@ const Default = () => {
   const [toastID, setToastID] = useState<string>();
   const [addForm, setAddForm] = useState(false);
 
-  const {
-    writeContract,
-    data: hash,
-    isPending,
-  } = useWriteContract();
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -429,13 +425,13 @@ const Default = () => {
                   </button>
                 </label>
 
-                {course.length > 0 && contractCourseRep && (
+                {course.length > 0 && (contractCourseRep || owner) && (
                   <div className="flex w-full items-center justify-end gap-2">
                     <form onSubmit={markAttendance}>
                       <button
                         type="submit"
                         disabled={isPending || isConfirming}
-                        className={`${(isPending || isConfirming) && "bg-custom-gradient-disable cursor-not-allowed border-0 text-white"} flex items-center gap-2 rounded-lg border border-accent px-8 py-2.5 text-accent shadow-sm`}
+                        className={`${(isPending || isConfirming) && "cursor-not-allowed border-0 bg-custom-gradient-disable text-white"} flex items-center gap-2 rounded-lg border border-accent px-8 py-2.5 text-accent shadow-sm`}
                       >
                         <span>
                           <FaCheck className="text-xl" />
@@ -447,7 +443,7 @@ const Default = () => {
                       <button
                         type="submit"
                         disabled={isPending || isConfirming}
-                        className={`flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm ${(isPending || isConfirming) && "bg-custom-gradient-disable cursor-not-allowed text-white"}`}
+                        className={`flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm ${(isPending || isConfirming) && "cursor-not-allowed bg-custom-gradient-disable text-white"}`}
                       >
                         <span>
                           <ImExit />
@@ -459,7 +455,7 @@ const Default = () => {
                       <button
                         type="submit"
                         disabled={isPending || isConfirming}
-                        className={`${isPending || isConfirming ? "bg-custom-gradient-disable cursor-not-allowed text-white" : "bg-custom-gradient"} flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm`}
+                        className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable text-white" : "bg-custom-gradient"} flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm`}
                       >
                         <span>
                           <IoAdd className="text-xl" />
