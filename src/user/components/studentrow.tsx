@@ -162,7 +162,7 @@ const StudentRow = (props: Props) => {
         <td>loading...</td>
         <td>loading...</td>
         <td>loading...</td>
-        <td>loading...</td>
+        {props.Course.length > 0 && <td>loading...</td>}
         {props.Course.length > 0 && <td>loading...</td>}
       </tr>
     );
@@ -195,7 +195,9 @@ const StudentRow = (props: Props) => {
       <td>{student?.name}</td>
       <td>{student?.studentAddress}</td>
       <td>{Number(student?.age) || 0}</td>
-      <td>{Number(student?.attendanceCount) || 0}</td>
+      {props.Course.length > 0 && (
+        <td>{Number(student?.attendanceCount) || 0}</td>
+      )}
       {props.Course.length > 0 && (
         <td>{student?.isRegistered ? "yes" : "no"}</td>
       )}

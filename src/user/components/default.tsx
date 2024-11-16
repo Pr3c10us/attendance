@@ -483,7 +483,7 @@ const Default = () => {
                     <th>Name</th>
                     <th>Student Address</th>
                     <th>Age</th>
-                    <th>Attendance Count</th>
+                     {course.length > 0 &&<th>Attendance Count</th>}
                     {course.length > 0 && <th>Registered</th>}
                   </tr>
                 </thead>
