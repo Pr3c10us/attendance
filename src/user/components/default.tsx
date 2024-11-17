@@ -352,13 +352,13 @@ const Default = () => {
           <section className="flex justify-end">
             {account.status === "connected" && (
               <>
-                <div className="mr-4 flex items-center gap-2 rounded-md border-2 px-6 py-2">
+                <div className="mr-4 flex items-center gap-2 rounded-md border-2 border-black shadow-lg px-6 py-2">
                   <div>{account.chain?.name}</div>
                   <SiHiveBlockchain className="inline-block h-5 w-5 text-[#86e7b8]" />
                 </div>
                 <div
                   onClick={() => disconnect()}
-                  className="cursor-pointer space-x-2 rounded-md border-2 px-6 py-2"
+                  className="cursor-pointer space-x-2 rounded-md border-2 border-black shadow-lg px-6 py-2"
                 >
                   <span>
                     {Number(balance.data?.formatted).toFixed(3) == "NaN"
