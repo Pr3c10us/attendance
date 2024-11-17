@@ -289,15 +289,18 @@ const Default = () => {
 
   async function markAttendance(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (selected.length > 1) {
-      toast.error("only one student at a time");
-      return;
-    } else if (selected.length < 1) {
-      toast.error("select a student to register");
+    if (selected.length < 1) {
+      toast.error("select at least one student");
       return;
     }
-    if (!selected[0].isRegistered) {
-      toast.error("student is not registered to course");
+    const registeredStudents: bigint[] = selected
+      .filter((student) => student.isRegistered)
+      .map((student) => {
+        return student.id;
+      });
+
+    if (registeredStudents.length < 1) {
+      toast.error("select at least one registered student");
       return;
     }
 
@@ -305,7 +308,7 @@ const Default = () => {
       abi: [
         {
           type: "function",
-          name: "incrementAttendance",
+          name: "incrementAttendances",
           inputs: [
             {
               name: "_course",
@@ -313,9 +316,9 @@ const Default = () => {
               internalType: "bytes32",
             },
             {
-              name: "_studentId",
-              type: "uint256",
-              internalType: "uint256",
+              name: "_studentIds",
+              type: "uint256[]",
+              internalType: "uint256[]",
             },
           ],
           outputs: [],
@@ -324,8 +327,8 @@ const Default = () => {
       ],
 
       address: ContractAddress as `0x${string}`,
-      functionName: "incrementAttendance",
-      args: [ToSHA3Hash(course) as `0x${string}`, selected[0].id],
+      functionName: "incrementAttendances",
+      args: [ToSHA3Hash(course) as `0x${string}`, registeredStudents],
     });
   }
 
