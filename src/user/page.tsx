@@ -7,7 +7,7 @@ function User() {
 
   return (
     <>
-      <main>
+      <main className="gradient-anim min-h-screen">
         {(account.status == "disconnected" ||
           account.status == "connecting") && (
           <>

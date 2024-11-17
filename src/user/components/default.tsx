@@ -378,7 +378,7 @@ const Default = () => {
           </section>
         </nav>
 
-        <div className="mx-4 overflow-auto rounded-xl border border-black pt-5 xl:mx-12">
+        <div className="mx-4 overflow-auto shadow-2xl rounded-xl  bg-[#FCFCFD] pt-5 xl:mx-12">
           <header className="mt-4 flex items-center gap-4 px-8 text-2xl font-bold md:text-3xl">
             <h1> Students List {isLoading && "loading..."}</h1>
             {contractOwner?.toLowerCase() ===
@@ -488,8 +488,8 @@ const Default = () => {
                       )}
                   </section>
                   <section className="w-full overflow-auto">
-                    <table className="over w-full divide-y divide-black overflow-auto text-nowrap text-center">
-                      <thead className="border-t border-t-black bg-[#FCFCFD]">
+                    <table className="over w-full divide-y  overflow-auto text-nowrap text-center">
+                      <thead className="border-t ">
                         <tr className="text-[#757575] [&>th]:px-8 [&>th]:py-3 [&>th]:font-normal [&>th]:capitalize">
                           <th>
                             <button
@@ -510,7 +510,7 @@ const Default = () => {
                         </tr>
                       </thead>
 
-                      <tbody className="divide-y divide-black">
+                      <tbody className="divide-y ">
                         {new Array(Number(contractStudentCount))
                           .fill(null)
                           .map((_, i) => {
