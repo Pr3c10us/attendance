@@ -160,6 +160,8 @@ const Default = () => {
     console.log(contractStudentCount);
     console.log(contractOwner);
     console.log(contractCourseRep);
+    console.log(isLoading);
+    console.log(isError);
 
     addressHandler();
   }, [
@@ -390,7 +392,11 @@ const Default = () => {
           <header className="mt-4 flex items-center gap-4 px-8 text-2xl font-bold md:text-3xl">
             <h1>
               {" "}
-              Students List {(isLoading || studentCount < 1) && "loading..."}
+              Students List{" "}
+              {
+                // isLoading ||
+                studentCount < 1 && "loading..."
+              }
             </h1>
             {owner && (
               <span
@@ -401,131 +407,135 @@ const Default = () => {
               </span>
             )}
           </header>
-          {isLoading || studentCount < 1 ? (
-            <div className="flex w-full items-center justify-center py-8">
-              <span className="aspect-square w-12 animate-spin rounded-full border-2 border-r-0 border-t-0 border-accent"></span>
-            </div>
-          ) : (
-            <>
-              <section className="flex w-full flex-col items-center justify-between gap-y-4 px-6 py-5 md:flex-row">
-                <label className="flex w-full flex-col gap-2 md:flex-row md:items-center">
-                  <input
-                    type="text"
-                    name="course"
-                    placeholder="Enter course code"
-                    value={courseInput}
-                    onChange={(e) => setCourseInput(e.target.value)}
-                    className="rounded-lg border border-[#e3e3e3] px-5 py-2.5 text-lg xl:w-1/2 xl:max-w-96"
-                  />
-                  <button
-                    disabled={
-                      courseInput.length < 1 ||
-                      courseInput == course ||
-                      isPending ||
-                      isConfirming
-                    }
-                    onClick={() => {
-                      setSelected([]);
-                      setCourse(courseInput);
-                      setSearchParams((prev) => {
-                        prev.set("course", courseInput);
-                        return prev;
-                      });
-                    }}
-                    className={`flex items-center justify-center gap-2 rounded-lg ${courseInput.length < 1 || courseInput == course || isPending || isConfirming ? "cursor-not-allowed bg-[#eee]" : "bg-black"} px-8 py-2.5 text-white`}
-                  >
-                    Apply
-                  </button>
-                </label>
+          {
+            // isLoading ||
+            studentCount < 1 ? (
+              <div className="flex w-full items-center justify-center py-8">
+                <span className="aspect-square w-12 animate-spin rounded-full border-2 border-r-0 border-t-0 border-accent"></span>
+              </div>
+            ) : (
+              <>
+                <section className="flex w-full flex-col items-center justify-between gap-y-4 px-6 py-5 md:flex-row">
+                  <label className="flex w-full flex-col gap-2 md:flex-row md:items-center">
+                    <input
+                      type="text"
+                      name="course"
+                      placeholder="Enter course code"
+                      value={courseInput}
+                      onChange={(e) => setCourseInput(e.target.value)}
+                      className="rounded-lg border border-[#e3e3e3] px-5 py-2.5 text-lg xl:w-1/2 xl:max-w-96"
+                    />
+                    <button
+                      disabled={
+                        courseInput.length < 1 ||
+                        courseInput == course ||
+                        isPending ||
+                        isConfirming
+                      }
+                      onClick={() => {
+                        setSelected([]);
+                        setCourse(courseInput);
+                        setSearchParams((prev) => {
+                          prev.set("course", courseInput);
+                          return prev;
+                        });
+                      }}
+                      className={`flex items-center justify-center gap-2 rounded-lg ${courseInput.length < 1 || courseInput == course || isPending || isConfirming ? "cursor-not-allowed bg-[#eee]" : "bg-black"} px-8 py-2.5 text-white`}
+                    >
+                      Apply
+                    </button>
+                  </label>
 
-                {course.length > 0 && (contractCourseRep || owner) && (
-                  <div className="flex w-full items-center gap-2 md:justify-end">
-                    <form
-                      className="w-full md:w-auto"
-                      onSubmit={markAttendance}
-                    >
-                      <button
-                        type="submit"
-                        disabled={isPending || isConfirming}
-                        className={`${(isPending || isConfirming) && "cursor-not-allowed border-0 bg-custom-gradient-disable text-white"} flex w-full items-center justify-center gap-2 rounded-lg border border-accent p-2.5 text-center text-accent shadow-sm md:w-auto xl:px-8`}
+                  {course.length > 0 && (contractCourseRep || owner) && (
+                    <div className="flex w-full items-center gap-2 md:justify-end">
+                      <form
+                        className="w-full md:w-auto"
+                        onSubmit={markAttendance}
                       >
-                        <span>
-                          <FaCheck className="text-xl" />
-                        </span>
-                        <span className="hidden text-nowrap xl:block">
-                          Mark Attendance
-                        </span>
-                      </button>
-                    </form>{" "}
-                    <form
-                      className="w-full md:w-auto"
-                      onSubmit={deregisteredStudent}
-                    >
-                      <button
-                        type="submit"
-                        disabled={isPending || isConfirming}
-                        className={`flex items-center gap-2 rounded-lg border p-2.5 shadow-sm xl:px-8 ${(isPending || isConfirming) && "cursor-not-allowed bg-custom-gradient-disable text-white"} w-full justify-center md:w-auto`}
-                      >
-                        <span>
-                          <ImExit className="text-xl" />
-                        </span>
-                        <span className="hidden xl:block">Deregister</span>
-                      </button>
-                    </form>
-                    <form
-                      className="w-full md:w-auto"
-                      onSubmit={registerStudent}
-                    >
-                      <button
-                        type="submit"
-                        disabled={isPending || isConfirming}
-                        className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable text-white" : "bg-custom-gradient"} flex w-full items-center justify-center gap-2 rounded-lg border p-2.5 shadow-sm md:w-auto xl:px-8`}
-                      >
-                        <span>
-                          <IoAdd className="text-xl" />
-                        </span>
-                        <span className="hidden xl:block">Register</span>
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </section>
-              <section className="w-full overflow-auto">
-                <table className="over w-full divide-y divide-black overflow-auto text-nowrap text-center">
-                  <thead className="border-t border-t-black bg-[#FCFCFD]">
-                    <tr className="text-[#757575] [&>th]:px-8 [&>th]:py-3 [&>th]:font-normal [&>th]:capitalize">
-                      <th>
                         <button
-                          disabled={selected.length < 1}
-                          onClick={() => {
-                            setSelected([]);
-                          }}
-                          className={`flex aspect-square w-6 items-center justify-center text-xl ${selected.length > 0 && "text-red-500"}`}
+                          type="submit"
+                          disabled={isPending || isConfirming}
+                          className={`${(isPending || isConfirming) && "cursor-not-allowed border-0 bg-custom-gradient-disable text-white"} flex w-full items-center justify-center gap-2 rounded-lg border border-accent p-2.5 text-center text-accent shadow-sm md:w-auto xl:px-8`}
                         >
-                          <BsFillXCircleFill />
+                          <span>
+                            <FaCheck className="text-xl" />
+                          </span>
+                          <span className="hidden text-nowrap xl:block">
+                            Mark Attendance
+                          </span>
                         </button>
-                      </th>
-                      <th>Name</th>
-                      <th>Student Address</th>
-                      <th>Age</th>
-                      {course.length > 0 && <th>Attendance Count</th>}
-                      {course.length > 0 && <th>Registered</th>}
-                    </tr>
-                  </thead>
+                      </form>{" "}
+                      <form
+                        className="w-full md:w-auto"
+                        onSubmit={deregisteredStudent}
+                      >
+                        <button
+                          type="submit"
+                          disabled={isPending || isConfirming}
+                          className={`flex items-center gap-2 rounded-lg border p-2.5 shadow-sm xl:px-8 ${(isPending || isConfirming) && "cursor-not-allowed bg-custom-gradient-disable text-white"} w-full justify-center md:w-auto`}
+                        >
+                          <span>
+                            <ImExit className="text-xl" />
+                          </span>
+                          <span className="hidden xl:block">Deregister</span>
+                        </button>
+                      </form>
+                      <form
+                        className="w-full md:w-auto"
+                        onSubmit={registerStudent}
+                      >
+                        <button
+                          type="submit"
+                          disabled={isPending || isConfirming}
+                          className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable text-white" : "bg-custom-gradient"} flex w-full items-center justify-center gap-2 rounded-lg border p-2.5 shadow-sm md:w-auto xl:px-8`}
+                        >
+                          <span>
+                            <IoAdd className="text-xl" />
+                          </span>
+                          <span className="hidden xl:block">Register</span>
+                        </button>
+                      </form>
+                    </div>
+                  )}
+                </section>
+                <section className="w-full overflow-auto">
+                  <table className="over w-full divide-y divide-black overflow-auto text-nowrap text-center">
+                    <thead className="border-t border-t-black bg-[#FCFCFD]">
+                      <tr className="text-[#757575] [&>th]:px-8 [&>th]:py-3 [&>th]:font-normal [&>th]:capitalize">
+                        <th>
+                          <button
+                            disabled={selected.length < 1}
+                            onClick={() => {
+                              setSelected([]);
+                            }}
+                            className={`flex aspect-square w-6 items-center justify-center text-xl ${selected.length > 0 && "text-red-500"}`}
+                          >
+                            <BsFillXCircleFill />
+                          </button>
+                        </th>
+                        <th>Name</th>
+                        <th>Student Address</th>
+                        <th>Age</th>
+                        {course.length > 0 && <th>Attendance Count</th>}
+                        {course.length > 0 && <th>Registered</th>}
+                      </tr>
+                    </thead>
 
-                  <tbody className="divide-y divide-black">
-                    {new Array(Number(studentCount)).fill(null).map((_, i) => {
-                      return (
-                        <StudentRow
-                          key={`jj${i}`}
-                          ID={BigInt(i)}
-                          Course={course}
-                          selected={selected}
-                          setSelected={setSelected}
-                        />
-                      );
-                    })}
-                    {/* <tr className="[&>td]:px-4 [&>td]:py-3">
+                    <tbody className="divide-y divide-black">
+                      {new Array(Number(studentCount))
+                        .fill(null)
+                        .map((_, i) => {
+                          return (
+                            <StudentRow
+                              key={`jj${i}`}
+                              ID={BigInt(i)}
+                              Course={course}
+                              selected={selected}
+                              setSelected={setSelected}
+                            />
+                          );
+                        })}
+                      {/* <tr className="[&>td]:px-4 [&>td]:py-3">
                   <td>
                     <div className="flex aspect-square w-5 items-center justify-center rounded-md border text-white">
                       <IoCheckmarkOutline />
@@ -549,11 +559,12 @@ const Default = () => {
                   <td>12</td>
                   {course.length > 0 && <td>Yes</td>}
                 </tr> */}
-                  </tbody>
-                </table>
-              </section>
-            </>
-          )}
+                    </tbody>
+                  </table>
+                </section>
+              </>
+            )
+          }
         </div>
       </main>
       {addForm && owner && (
