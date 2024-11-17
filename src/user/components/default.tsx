@@ -346,7 +346,9 @@ const Default = () => {
                 className="absolute w-full"
               />
             </div>
-            <h1 className="text-2xl font-extrabold">Student Attendance DAPP</h1>
+            <h1 className="text-xl font-extrabold sm:text-2xl">
+              Student Attendance DAPP
+            </h1>
           </section>
           <section className="flex justify-end">
             {account.status === "connected" && (
@@ -443,7 +445,9 @@ const Default = () => {
                         <span>
                           <FaCheck className="text-xl" />
                         </span>
-                        <span className="hidden xl:block">Mark Attendance</span>
+                        <span className="hidden text-nowrap xl:block">
+                          Mark Attendance
+                        </span>
                       </button>
                     </form>{" "}
                     <form
