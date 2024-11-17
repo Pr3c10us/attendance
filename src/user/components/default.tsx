@@ -17,6 +17,7 @@ import { BsFillXCircleFill } from "react-icons/bs";
 import { useSearchParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
 import AddStudent from "./addForm";
+import ToSHA3Hash from "../../../utils/toSHAHash";
 
 export type Student = {
   id: bigint;
@@ -135,7 +136,10 @@ const Default = () => {
       },
     ],
     functionName: "authorizedCourseReps",
-    args: [course as `0x${string}`, account.address as `0x${string}`],
+    args: [
+      ToSHA3Hash(course) as `0x${string}`,
+      account.address as `0x${string}`,
+    ],
   });
 
   async function addressHandler() {
@@ -187,7 +191,7 @@ const Default = () => {
         setToastID("");
         setTimeout(() => {
           window.location.reload();
-        }, 2500);
+        }, 2000);
       } else if (isFailed) {
         toast.error("Failed!", {
           duration: 2000,
@@ -196,7 +200,7 @@ const Default = () => {
         setToastID("");
         setTimeout(() => {
           window.location.reload();
-        }, 2500);
+        }, 2000);
       }
     }
   }, [isConfirming, isConfirmed, isFailed]);
@@ -237,7 +241,7 @@ const Default = () => {
       ],
       address: ContractAddress as `0x${string}`,
       functionName: "deregisterStudent",
-      args: [course as `0x${string}`, selected[0].id],
+      args: [ToSHA3Hash(course) as `0x${string}`, selected[0].id],
     });
   }
 
@@ -279,7 +283,7 @@ const Default = () => {
 
       address: ContractAddress as `0x${string}`,
       functionName: "registerStudent",
-      args: [course as `0x${string}`, selected[0].id],
+      args: [ToSHA3Hash(course) as `0x${string}`, selected[0].id],
     });
   }
 
@@ -321,16 +325,16 @@ const Default = () => {
 
       address: ContractAddress as `0x${string}`,
       functionName: "incrementAttendance",
-      args: [course as `0x${string}`, selected[0].id],
+      args: [ToSHA3Hash(course) as `0x${string}`, selected[0].id],
     });
   }
 
   return (
     <>
-      <main className="space-y-8 px-8 py-4">
-        <nav className="flex items-center justify-between p-4">
+      <main className="space-y-4 px-2 py-4 md:space-y-8 xl:px-8">
+        <nav className="flex flex-col items-center justify-between gap-y-4 p-4 lg:flex-row">
           <section className="flex items-center gap-4">
-            <div className="relative aspect-square w-10">
+            <div className="relative aspect-square w-6 lg:w-10">
               <img
                 src="./logoblue.svg"
                 alt="logoblack"
@@ -362,7 +366,7 @@ const Default = () => {
                     {` `}
                     {account.chain?.nativeCurrency.symbol}
                   </span>
-                  <span className={``}>
+                  <span className={`hidden lg:inline-block`}>
                     {account.address
                       .substring(0, 8)
                       .concat(`...${account.address.slice(-4)}`)}
@@ -373,11 +377,11 @@ const Default = () => {
           </section>
         </nav>
 
-        <div className="mx-12 rounded-xl border border-[#eee] pt-5">
-          <header className="mt-4 flex items-center gap-4 px-8 text-3xl font-bold">
+        <div className="mx-4 overflow-auto rounded-xl border border-black pt-5 xl:mx-12">
+          <header className="mt-4 flex items-center gap-4 px-8 text-2xl font-bold md:text-3xl">
             <h1>
               {" "}
-              Students List {isLoading || (studentCount < 1 && "loading...")}
+              Students List {(isLoading || studentCount < 1) && "loading..."}
             </h1>
             {owner && (
               <span
@@ -394,15 +398,15 @@ const Default = () => {
             </div>
           ) : (
             <>
-              <section className="flex w-full items-center justify-between px-6 py-5">
-                <label className="flex w-full items-center gap-2">
+              <section className="flex w-full flex-col items-center justify-between gap-y-4 px-6 py-5 md:flex-row">
+                <label className="flex w-full flex-col gap-2 md:flex-row md:items-center">
                   <input
                     type="text"
                     name="course"
                     placeholder="Enter course code"
                     value={courseInput}
                     onChange={(e) => setCourseInput(e.target.value)}
-                    className="w-1/2 max-w-96 rounded-lg border border-[#e3e3e3] px-5 py-2.5 text-lg"
+                    className="rounded-lg border border-[#e3e3e3] px-5 py-2.5 text-lg xl:w-1/2 xl:max-w-96"
                   />
                   <button
                     disabled={
@@ -419,88 +423,98 @@ const Default = () => {
                         return prev;
                       });
                     }}
-                    className={`flex items-center gap-2 rounded-lg ${courseInput.length < 1 || courseInput == course || isPending || isConfirming ? "cursor-not-allowed bg-[#eee]" : "bg-black"} px-8 py-2.5 text-white`}
+                    className={`flex items-center justify-center gap-2 rounded-lg ${courseInput.length < 1 || courseInput == course || isPending || isConfirming ? "cursor-not-allowed bg-[#eee]" : "bg-black"} px-8 py-2.5 text-white`}
                   >
                     Apply
                   </button>
                 </label>
 
                 {course.length > 0 && (contractCourseRep || owner) && (
-                  <div className="flex w-full items-center justify-end gap-2">
-                    <form onSubmit={markAttendance}>
+                  <div className="flex w-full items-center gap-2 md:justify-end">
+                    <form
+                      className="w-full md:w-auto"
+                      onSubmit={markAttendance}
+                    >
                       <button
                         type="submit"
                         disabled={isPending || isConfirming}
-                        className={`${(isPending || isConfirming) && "cursor-not-allowed border-0 bg-custom-gradient-disable text-white"} flex items-center gap-2 rounded-lg border border-accent px-8 py-2.5 text-accent shadow-sm`}
+                        className={`${(isPending || isConfirming) && "cursor-not-allowed border-0 bg-custom-gradient-disable text-white"} flex w-full items-center justify-center gap-2 rounded-lg border border-accent p-2.5 text-center text-accent shadow-sm md:w-auto xl:px-8`}
                       >
                         <span>
                           <FaCheck className="text-xl" />
                         </span>
-                        Mark Attendance
+                        <span className="hidden xl:block">Mark Attendance</span>
                       </button>
                     </form>{" "}
-                    <form onSubmit={deregisteredStudent}>
+                    <form
+                      className="w-full md:w-auto"
+                      onSubmit={deregisteredStudent}
+                    >
                       <button
                         type="submit"
                         disabled={isPending || isConfirming}
-                        className={`flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm ${(isPending || isConfirming) && "cursor-not-allowed bg-custom-gradient-disable text-white"}`}
+                        className={`flex items-center gap-2 rounded-lg border p-2.5 shadow-sm xl:px-8 ${(isPending || isConfirming) && "cursor-not-allowed bg-custom-gradient-disable text-white"} w-full justify-center md:w-auto`}
                       >
                         <span>
-                          <ImExit />
+                          <ImExit className="text-xl" />
                         </span>
-                        Deregister
+                        <span className="hidden xl:block">Deregister</span>
                       </button>
                     </form>
-                    <form onSubmit={registerStudent}>
+                    <form
+                      className="w-full md:w-auto"
+                      onSubmit={registerStudent}
+                    >
                       <button
                         type="submit"
                         disabled={isPending || isConfirming}
-                        className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable text-white" : "bg-custom-gradient"} flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm`}
+                        className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable text-white" : "bg-custom-gradient"} flex w-full items-center justify-center gap-2 rounded-lg border p-2.5 shadow-sm md:w-auto xl:px-8`}
                       >
                         <span>
                           <IoAdd className="text-xl" />
                         </span>
-                        Register
+                        <span className="hidden xl:block">Register</span>
                       </button>
                     </form>
                   </div>
                 )}
               </section>
-              <table className="over w-full divide-y divide-[#eee] text-center">
-                <thead className="border-t bg-[#FCFCFD]">
-                  <tr className="text-[#757575] [&>th]:px-8 [&>th]:py-3 [&>th]:font-normal [&>th]:capitalize">
-                    <th>
-                      <button
-                        disabled={selected.length < 1}
-                        onClick={() => {
-                          setSelected([]);
-                        }}
-                        className={`flex aspect-square w-6 items-center justify-center text-xl ${selected.length > 0 && "text-red-500"}`}
-                      >
-                        <BsFillXCircleFill />
-                      </button>
-                    </th>
-                    <th>Name</th>
-                    <th>Student Address</th>
-                    <th>Age</th>
-                     {course.length > 0 &&<th>Attendance Count</th>}
-                    {course.length > 0 && <th>Registered</th>}
-                  </tr>
-                </thead>
+              <section className="w-full overflow-auto">
+                <table className="over w-full divide-y divide-black overflow-auto text-nowrap text-center">
+                  <thead className="border-t border-t-black bg-[#FCFCFD]">
+                    <tr className="text-[#757575] [&>th]:px-8 [&>th]:py-3 [&>th]:font-normal [&>th]:capitalize">
+                      <th>
+                        <button
+                          disabled={selected.length < 1}
+                          onClick={() => {
+                            setSelected([]);
+                          }}
+                          className={`flex aspect-square w-6 items-center justify-center text-xl ${selected.length > 0 && "text-red-500"}`}
+                        >
+                          <BsFillXCircleFill />
+                        </button>
+                      </th>
+                      <th>Name</th>
+                      <th>Student Address</th>
+                      <th>Age</th>
+                      {course.length > 0 && <th>Attendance Count</th>}
+                      {course.length > 0 && <th>Registered</th>}
+                    </tr>
+                  </thead>
 
-                <tbody className="divide-y divide-[#eee]">
-                  {new Array(Number(studentCount)).fill(null).map((_, i) => {
-                    return (
-                      <StudentRow
-                        key={`jj${i}`}
-                        ID={BigInt(i)}
-                        Course={course}
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-                    );
-                  })}
-                  {/* <tr className="[&>td]:px-4 [&>td]:py-3">
+                  <tbody className="divide-y divide-black">
+                    {new Array(Number(studentCount)).fill(null).map((_, i) => {
+                      return (
+                        <StudentRow
+                          key={`jj${i}`}
+                          ID={BigInt(i)}
+                          Course={course}
+                          selected={selected}
+                          setSelected={setSelected}
+                        />
+                      );
+                    })}
+                    {/* <tr className="[&>td]:px-4 [&>td]:py-3">
                   <td>
                     <div className="flex aspect-square w-5 items-center justify-center rounded-md border text-white">
                       <IoCheckmarkOutline />
@@ -524,8 +538,9 @@ const Default = () => {
                   <td>12</td>
                   {course.length > 0 && <td>Yes</td>}
                 </tr> */}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </section>
             </>
           )}
         </div>

@@ -3,6 +3,7 @@ import { Student } from "./default";
 import { address as ContractAddress } from "../../../utils/abis/attendance.json";
 import { useReadContract } from "wagmi";
 import { IoCheckmarkOutline } from "react-icons/io5";
+import ToSHA3Hash from "../../../utils/toSHAHash";
 interface Props {
   ID: bigint;
   Course: string;
@@ -124,7 +125,7 @@ const StudentRow = (props: Props) => {
         },
       ],
       functionName: "getStudentByCourse",
-      args: [props.Course as `0x${string}`, props.ID],
+      args: [ToSHA3Hash(props.Course) as `0x${string}`, props.ID],
     });
   // Format the student data for easier consumption
   useEffect(() => {
@@ -192,14 +193,18 @@ const StudentRow = (props: Props) => {
           <IoCheckmarkOutline />
         </div>
       </td>
-      <td>{student?.name}</td>
-      <td>{student?.studentAddress}</td>
+      <td className="text-nowrap font-bold">{student?.name}</td>
+      <td className={`text-black/50`}>{student?.studentAddress}</td>
       <td>{Number(student?.age) || 0}</td>
       {props.Course.length > 0 && (
         <td>{Number(student?.attendanceCount) || 0}</td>
       )}
       {props.Course.length > 0 && (
-        <td>{student?.isRegistered ? "yes" : "no"}</td>
+        <td
+          className={`${student?.isRegistered ? "text-accent" : "text-red-500"}`}
+        >
+          {student?.isRegistered ? "yes" : "no"}
+        </td>
       )}
     </tr>
   );

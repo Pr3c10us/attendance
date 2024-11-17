@@ -101,7 +101,7 @@ const AddStudent = (props: {
         setToastID("");
         setTimeout(() => {
           window.location.reload();
-        }, 2500);
+        }, 2000);
       } else if (isFailed) {
         toast.error("Failed!", {
           duration: 2000,
@@ -110,7 +110,7 @@ const AddStudent = (props: {
         setToastID("");
         setTimeout(() => {
           window.location.reload();
-        }, 2500);
+        }, 2000);
       }
     }
   }, [isConfirming, isConfirmed, isFailed]);
@@ -165,14 +165,14 @@ const AddStudent = (props: {
             <button
               type="submit"
               disabled={isPending || isConfirming}
-              className={`${isPending || isConfirming ? "bg-custom-gradient-disable cursor-not-allowed text-white" : "bg-custom-gradient"} mt-4 flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm`}
+              className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable text-white" : "bg-custom-gradient"} mt-4 flex items-center gap-2 rounded-lg border px-8 py-2.5 shadow-sm`}
             >
               Add Student
             </button>
             <button
               onClick={() => props.setAddForm(false)}
               disabled={isPending || isConfirming}
-              className={`${isPending || isConfirming ? "bg-custom-gradient-disable cursor-not-allowed" : "bg-red-500"} mt-4 flex items-center gap-2 rounded-lg border px-8 py-2.5 text-white shadow-sm`}
+              className={`${isPending || isConfirming ? "cursor-not-allowed bg-custom-gradient-disable" : "bg-red-500"} mt-4 flex items-center gap-2 rounded-lg border px-8 py-2.5 text-white shadow-sm`}
             >
               Cancel
             </button>
