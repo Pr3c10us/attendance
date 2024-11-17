@@ -13,6 +13,7 @@ export const config = createConfig({
     [mainnet.id]: http(),
     [sepolia.id]: http(),
   },
+
 })
 
 declare module 'wagmi' {

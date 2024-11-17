@@ -157,6 +157,10 @@ const Default = () => {
   }
 
   useEffect(() => {
+    console.log(contractStudentCount);
+    console.log(contractOwner);
+    console.log(contractCourseRep);
+
     addressHandler();
   }, [
     isLoading,
