@@ -5,8 +5,8 @@ const Connect = () => {
 
   return (
     <section className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="w-full space-y-8 rounded-2xl border border-black/5 bg-white p-4 py-8 text-center shadow-xl md:w-1/3 md:p-8">
-        <h1 className="text-2xl font-semibold md:text-4xl">Connect a wallet</h1>
+      <div className="w-full space-y-8 rounded-2xl border border-black/5 bg-white p-4 py-8 text-center shadow-xl max-lg:max-w-96 md:p-8 lg:w-1/3 lg:max-w-[30rem]">
+        <h1 className="text-2xl font-semibold lg:text-3xl">Connect a wallet</h1>
         <div className="flex flex-col items-start gap-4">
           {connectors.map((connector) => {
             if (connector.id != "injected") {
